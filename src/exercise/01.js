@@ -14,7 +14,7 @@ function Counter({initialCount = 0, step = 1}) {
         return {count: count + step}
 
       default:
-        return {count}
+        throw new Error(`Unsupported action type ${type}`)
     }
   }
   const [state, dispatch] = React.useReducer(countReducer, {
