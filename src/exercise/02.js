@@ -52,6 +52,7 @@ function useAsync(asyncCallback, initialState, dependencies) {
     )
     // 🐨 because of limitations with ESLint, you'll need to ignore
     // the react-hooks/exhaustive-deps rule. We'll fix this in an extra credit.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies)
 
   return state
