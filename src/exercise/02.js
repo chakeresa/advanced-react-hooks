@@ -35,13 +35,9 @@ function useAsync(asyncCallback, initialState) {
     ...initialState,
   })
 
-  React.useEffect(() => {
-    const promise = asyncCallback()
-    if (!promise) {
-      return
-    }
-
+  const run = React.useCallback(promise => {
     dispatch({type: 'pending'})
+
     promise.then(
       data => {
         dispatch({type: 'resolved', data})
@@ -50,24 +46,24 @@ function useAsync(asyncCallback, initialState) {
         dispatch({type: 'rejected', error})
       },
     )
-  }, [asyncCallback])
+  }, [])
 
-  return state
+  return {...state, run}
 }
 
 function PokemonInfo({pokemonName}) {
-  const pokemonFetcher = React.useCallback(() => {
-    if (!pokemonName) {
-      return
-    }
-    return fetchPokemon(pokemonName)
-  }, [pokemonName])
-
-  const state = useAsync(pokemonFetcher, {
+  const state = useAsync({
     status: pokemonName ? 'pending' : 'idle',
   })
 
-  const {data: pokemon, status, error} = state
+  const {data: pokemon, status, error, run} = state
+
+  React.useEffect(() => {
+    if (!pokemonName) {
+      return
+    }
+    return run(fetchPokemon(pokemonName))
+  }, [pokemonName, run])
 
   if (status === 'idle' || !pokemonName) {
     return 'Submit a pokemon'
