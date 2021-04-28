@@ -22,8 +22,7 @@ function CountDisplay() {
 }
 
 function Counter() {
-  // eslint-disable-next-line
-  const [count, setCount] = React.useContext(CountContext)
+  const [, setCount] = React.useContext(CountContext)
 
   const increment = () => setCount(c => c + 1)
   return <button onClick={increment}>Increment count</button>
